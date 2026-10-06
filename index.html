@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiverso de Recuerdos</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Librerías 3D -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+
+    <canvas id="universo"></canvas>
+
+    <!-- BARRA SUPERIOR DE INTERFAZ -->
+    <div id="ui-container">
+        <div class="selector-galaxia">
+            <label for="selectUniversoActual">Galaxia:</label>
+            <select id="selectUniversoActual" onchange="cambiarUniverso(this.value)"></select>
+        </div>
+
+        <div class="botones-menu">
+            <button onclick="toggleMenuCreador()">🪐 Crear Planeta</button>
+            <button onclick="toggleMenuEditor()">✏️ Editar Planeta</button>
+            <button onclick="toggleMenuNuevoUniverso()">🌌 Nueva Galaxia</button>
+            <button onclick="toggleMenuEditarUniverso()">⚙️ Editar Galaxia</button>
+        </div>
+    </div>
+
+    <!-- PANEL: CREAR PLANETA -->
+    <div id="panelCreador" class="panel-flotante panel-oculto">
+        <h3>Crear Nuevo Recuerdo</h3>
+        <label for="inputNombre">Nombre:</label>
+        <input type="text" id="inputNombre" placeholder="Ej: Nuestro primer café">
+        
+        <label for="inputMensaje">Mensaje / Recuerdo:</label>
+        <textarea id="inputMensaje" placeholder="Escribe el mensaje especial..."></textarea>
+        
+        <label for="inputColor">Color del Planeta:</label>
+        <input type="color" id="inputColor" value="#3399ff">
+        
+        <label for="inputTamano">Tamaño:</label>
+        <input type="range" id="inputTamano" min="1" max="3" step="0.1" value="1.5">
+        
+        <label for="selectDecoracion">Decoración:</label>
+        <select id="selectDecoracion">
+            <option value="ninguna">Ninguna</option>
+            <option value="anillo">Anillo</option>
+            <option value="halo">Halo Brillante</option>
+            <option value="luna">Luna Pequeña</option>
+        </select>
+        
+        <label for="inputFoto">Foto (Opcional):</label>
+        <input type="file" id="inputFoto" accept="image/*">
+        
+        <button onclick="crearPlanetaDesdeUI()">Guardar Planeta</button>
+    </div>
+
+    <!-- PANEL: EDITAR PLANETA -->
+    <div id="panelEditor" class="panel-flotante panel-oculto">
+        <h3>Editar Planeta</h3>
+        <label for="selectPlanetaEditar">Seleccionar Planeta:</label>
+        <select id="selectPlanetaEditar" onchange="cargarDatosEnEditor()"></select>
+        
+        <label for="editNombre">Nombre:</label>
+        <input type="text" id="editNombre">
+        
+        <label for="editMensaje">Mensaje:</label>
+        <textarea id="editMensaje"></textarea>
+        
+        <label for="editDecoracion">Decoración:</label>
+        <select id="editDecoracion">
+            <option value="ninguna">Ninguna</option>
+            <option value="anillo">Anillo</option>
+            <option value="halo">Halo Brillante</option>
+            <option value="luna">Luna Pequeña</option>
+        </select>
+        
+        <label for="editFoto">Cambiar Foto (Opcional):</label>
+        <input type="file" id="editFoto" accept="image/*">
+        
+        <button onclick="guardarCambiosPlaneta()">Guardar Cambios</button>
+    </div>
+
+    <!-- PANEL: NUEVA GALAXIA -->
+    <div id="panelNuevoUniverso" class="panel-flotante panel-oculto">
+        <h3>Crear Nueva Galaxia</h3>
+        <label for="inputNombreUniverso">Nombre de la Galaxia:</label>
+        <input type="text" id="inputNombreUniverso" placeholder="Ej: Año 2026">
+        
+        <label for="inputColorGalaxia">Color de las Estrellas:</label>
+        <input type="color" id="inputColorGalaxia" value="#ffffff">
+        
+        <button onclick="crearNuevoUniversoUI()">Crear Galaxia</button>
+    </div>
+
+    <!-- PANEL: EDITAR GALAXIA -->
+    <div id="panelEditarUniverso" class="panel-flotante panel-oculto">
+        <h3>Editar Galaxia Actual</h3>
+        <label for="editNombreGalaxia">Nombre de la Galaxia:</label>
+        <input type="text" id="editNombreGalaxia">
+        
+        <label for="editColorGalaxia">Color de Estrellas:</label>
+        <input type="color" id="editColorGalaxia">
+        
+        <div style="margin-top: 15px; display: flex; gap: 10px;">
+            <button onclick="guardarCambiosGalaxiaUI()">Guardar Cambios</button>
+            <button onclick="eliminarGalaxiaActualUI()" style="background-color: #ff4d4d;">Eliminar Galaxia</button>
+        </div>
+    </div>
+
+    <!-- MODAL DETALLE PLANETA -->
+    <div id="modalPlaneta" class="panel-oculto">
+        <div class="modal-contenido">
+            <h2 id="tituloPlaneta"></h2>
+            <img id="imgPlanetaModal" src="" alt="Foto del recuerdo" style="display:none; max-width:100%; border-radius:8px; margin:10px 0;">
+            <p id="mensajePlaneta"></p>
+            <div class="modal-acciones">
+                <button id="btnEliminarPlaneta" onclick="confirmarEliminacion()" style="background-color:#ff4d4d;">Eliminar Planeta</button>
+                <button onclick="cerrarModal()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
